@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        Android逆向：修改APK并重打包签名 | 卡  卡
+      
+    </title>
+    <meta name="description" content="  " />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/panda.avif" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/panda.avif" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/panda.avif" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/panda.avif"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    <div class="head">
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/panda.avif" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/blockchain">区 块 链</a>
+              
+                <a class="nav-menu-item" href="/security">计算机安全</a>
+              
+                <a class="nav-menu-item" href="/life">生 活</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">Android逆向：修改APK并重打包签名</div>
+        <div class="post-info">
+          
+  <a href="/tags/Android/" class="post-tag">#Android</a><a href="/tags/%E9%80%86%E5%90%91/" class="post-tag">#逆向</a>
+
+
+          <span class="post-date">2024-08-06</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%9B%AE%E6%A0%87%EF%BC%9A"><span class="post-toc-text">目标：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%AD%A5%E9%AA%A41%EF%BC%9A%E8%A7%A3%E5%8E%8BAPK"><span class="post-toc-text">步骤1：解压APK</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%AD%A5%E9%AA%A42%EF%BC%9A%E4%BF%AE%E6%94%B9"><span class="post-toc-text">步骤2：修改</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%AD%A5%E9%AA%A43%EF%BC%9A%E9%87%8D%E6%89%93%E5%8C%85"><span class="post-toc-text">步骤3：重打包</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%AD%A5%E9%AA%A44%EF%BC%9AAPK%E5%AF%B9%E9%BD%90"><span class="post-toc-text">步骤4：APK对齐</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%AD%A5%E9%AA%A45%EF%BC%9A%E7%94%9F%E6%88%90-jks%E5%AF%86%E9%92%A5%E6%96%87%E4%BB%B6"><span class="post-toc-text">步骤5：生成.jks密钥文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%AD%A5%E9%AA%A46%EF%BC%9A%E9%87%8D%E7%AD%BE%E5%90%8D"><span class="post-toc-text">步骤6：重签名</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9C%80%E5%90%8E%EF%BC%9A%E5%B0%9D%E8%AF%95%E8%BF%90%E8%A1%8C"><span class="post-toc-text">最后：尝试运行</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%80%9D%E8%80%83%EF%BC%9A"><span class="post-toc-text">思考：</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>在Android逆向中，经常需要对APK修改，然后重新打包并签名。这篇文章中，介绍了如何使用各个工具来完成这个过程。</p>
+<p>各个步骤以及所需工具：</p>
+<ol>
+<li>解压APK文件； 工具：apktool</li>
+<li>进行修改； 工具：看修改需求</li>
+<li>重新打包APK； 工具：apktool</li>
+<li>将APK对齐； 工具：zipalign</li>
+<li>生成密钥文件，并对APK进行签名；工具：keytool、jarsigner</li>
+</ol>
+<p>小白鼠：demo.apk</p>
+<h4 id="目标："><a href="#目标：" class="headerlink" title="目标："></a>目标：</h4><p>将<code>addThreeNum(1, 2, 3)</code>改为<code>addThreeNum(4, 5, 6)</code>，并且修改后能够成功运行。</p>
+<p><img src="/%5Cimages%5C%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D%5Cimage-20240806103111215.png" alt="image-20240806103111215"></p>
+<blockquote>
+<p>demo.apk下载：<a target="_blank" rel="noopener" href="https://www.123pan.com/s/9j4Xjv-MMAhv.html?%E6%8F%90%E5%8F%96%E7%A0%81:tgno">https://www.123pan.com/s/9j4Xjv-MMAhv.html?提取码:tgno</a></p>
+<p>用到的工具可自行从网上获取。</p>
+</blockquote>
+<h4 id="步骤1：解压APK"><a href="#步骤1：解压APK" class="headerlink" title="步骤1：解压APK"></a>步骤1：解压APK</h4><p>使用apktool解压APK到output目录下</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">E:\&gt; apktool d .\demo.apk <span class="literal">-o</span> output\</span><br><span class="line">I: <span class="keyword">Using</span> Apktool 2.7.0 on demo.apk</span><br><span class="line">I: Loading resource table...</span><br><span class="line">I: Decoding AndroidManifest.xml with resources...</span><br><span class="line">I: Loading resource table from file: C:\Users\aaaka\AppData\Local\apktool\framework\<span class="number">1</span>.apk</span><br><span class="line">I: Regular manifest package...</span><br><span class="line">I: Decoding file<span class="literal">-resources</span>...</span><br><span class="line">I: Decoding values */* XMLs...</span><br><span class="line">I: Baksmaling classes.dex...</span><br><span class="line">I: Copying assets and libs...</span><br><span class="line">I: Copying unknown files...</span><br><span class="line">I: Copying original files...</span><br><span class="line">I: Copying META<span class="literal">-INF</span>/services directory</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="步骤2：修改"><a href="#步骤2：修改" class="headerlink" title="步骤2：修改"></a>步骤2：修改</h4><p>在output\smali\com\example\myapplication\MainActivity.smail中，把<code>1 2 3 </code>改为<code> 4 5 6</code></p>
+<p><img src="/%5Cimages%5C%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D%5Cimage-20240806095045017.png" alt="image-20240806095045017"></p>
+<h4 id="步骤3：重打包"><a href="#步骤3：重打包" class="headerlink" title="步骤3：重打包"></a>步骤3：重打包</h4><p>解压的逆过程，将output目录打包为newdemo.apk</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">E:\&gt; apktool b output\ <span class="literal">-o</span> .\newdemo.apk</span><br><span class="line">I: <span class="keyword">Using</span> Apktool 2.7.0</span><br><span class="line">I: Checking whether sources has changed...</span><br><span class="line">I: Smaling smali folder into classes.dex...</span><br><span class="line">I: Checking whether resources has changed...</span><br><span class="line">I: Building resources...</span><br><span class="line">I: Copying libs... (/lib)</span><br><span class="line">I: Copying libs... (/kotlin)</span><br><span class="line">I: Copying libs... (/META<span class="literal">-INF</span>/services)</span><br><span class="line">I: Building apk file...</span><br><span class="line">I: Copying unknown files/<span class="built_in">dir</span>...</span><br><span class="line">I: Built apk into: .\newdemo.apk</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="步骤4：APK对齐"><a href="#步骤4：APK对齐" class="headerlink" title="步骤4：APK对齐"></a>步骤4：APK对齐</h4><p>（注意：当用到NDK开发，含有.so库时，需要添加<code>-p</code>参数）</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">E:\&gt; zipalign <span class="literal">-p</span> <span class="literal">-v</span> <span class="number">4</span> .\newdemo.apk .\newdemo<span class="literal">-aligned</span>.apk</span><br><span class="line">Verifying alignment of .\newdemo<span class="literal">-aligned</span>.apk (<span class="number">4</span>)...</span><br><span class="line">      <span class="number">49</span> AndroidManifest.xml (OK - compressed)</span><br><span class="line">    <span class="number">1688</span> classes.dex (OK - compressed)</span><br><span class="line"> <span class="number">3296246</span> kotlin/annotation/annotation.kotlin_builtins (OK - compressed)</span><br><span class="line"> <span class="number">3296897</span> kotlin/collections/collections.kotlin_builtins (OK - compressed)</span><br><span class="line"> <span class="number">3298508</span> kotlin/coroutines/coroutines.kotlin_builtins (OK - compressed)</span><br><span class="line"> 				......(省略)......</span><br><span class="line"> <span class="number">3731560</span> resources.arsc (OK)</span><br><span class="line"> <span class="number">4709532</span> assets/dexopt/baseline.prof (OK)</span><br><span class="line"> <span class="number">4711368</span> assets/dexopt/baseline.profm (OK)</span><br><span class="line"> <span class="number">4711611</span> DebugProbesKt.bin (OK - compressed)</span><br><span class="line">Verification succesful</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="步骤5：生成-jks密钥文件"><a href="#步骤5：生成-jks密钥文件" class="headerlink" title="步骤5：生成.jks密钥文件"></a>步骤5：生成<code>.jks</code>密钥文件</h4><p>各个参数的含义可自行了解</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">E:\&gt; keytool <span class="literal">-genkeypair</span> <span class="literal">-v</span> <span class="literal">-keystore</span> key.jks <span class="literal">-keyalg</span> RSA <span class="literal">-keysize</span> <span class="number">2048</span> <span class="literal">-validity</span> <span class="number">10000</span> <span class="literal">-alias</span> akakey</span><br><span class="line">输入密钥库口令:</span><br><span class="line">再次输入新口令:</span><br><span class="line">您的名字与姓氏是什么?</span><br><span class="line">  [<span class="type">Unknown</span>]:  aka</span><br><span class="line">您的组织单位名称是什么?</span><br><span class="line">  [<span class="type">Unknown</span>]:  Reverse</span><br><span class="line">您的组织名称是什么?</span><br><span class="line">  [<span class="type">Unknown</span>]:  Android</span><br><span class="line">您所在的城市或区域名称是什么?</span><br><span class="line">  [<span class="type">Unknown</span>]:  shenzhen</span><br><span class="line">您所在的省/市/自治区名称是什么?</span><br><span class="line">  [<span class="type">Unknown</span>]:  guangdong</span><br><span class="line">该单位的双字母国家/地区代码是什么?</span><br><span class="line">  [<span class="type">Unknown</span>]:  CN</span><br><span class="line">CN=aka, OU=Reverse, O=Android, L=shenzhen, ST=guangdong, C=CN是否正确?</span><br><span class="line">  [否]:  是</span><br><span class="line"></span><br><span class="line">正在为以下对象生成 <span class="number">2</span>,<span class="number">048</span> 位RSA密钥对和自签名证书 (SHA256withRSA) (有效期为 <span class="number">10</span>,<span class="number">000</span> 天):</span><br><span class="line">         CN=aka, OU=Reverse, O=Android, L=shenzhen, ST=guangdong, C=CN</span><br><span class="line">[正在存储<span class="type">key.jks</span>]</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="步骤6：重签名"><a href="#步骤6：重签名" class="headerlink" title="步骤6：重签名"></a>步骤6：重签名</h4><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">E:\&gt; apksigner sign <span class="literal">--ks</span> key.jks <span class="literal">--ks-key-alias</span> akakey <span class="literal">--out</span> .\newdemo<span class="literal">-aligned-signed</span>.apk .\newdemo<span class="literal">-aligned</span>.apk</span><br><span class="line">Keystore password <span class="keyword">for</span> signer <span class="comment">#1:</span></span><br><span class="line">E:\&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="最后：尝试运行"><a href="#最后：尝试运行" class="headerlink" title="最后：尝试运行"></a>最后：尝试运行</h4><p>可以成功运行，并且修改有效。</p>
+<p><img src="/%5Cimages%5C%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D%5Cimage-20240806102009372.png" alt="image-20240806102009372"></p>
+<h4 id="思考："><a href="#思考：" class="headerlink" title="思考："></a>思考：</h4><p>既然APK可以二次签名，并且能够成功运行。那么，APK中签名机制所起到的作用是什么呢？就是资源文件中META-INF目录下的<code>.RSA .SF .MF</code>三个文件。</p>
+<p><img src="/%5Cimages%5C%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D%5Cimage-20240806120006871.png" alt="image-20240806120006871"></p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/about2.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/wechatpay.jpg" />
+  </div>
+  <div class="like-text">“给作者加个鸡腿~”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/08/06/hello-world/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>广州到深圳之莽夫骑行</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <div class="post-nav-item-right"></div>
+  
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://narnona.github.io">kaka</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg" />
+                  <a class="foot-link"
+                     href="mailto:tolele666@gmail.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/narnona">GitHub</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/x.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://x.com/yojil341699">Twitter</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/telegram.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://t.me/tupongren">Telegram</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg" />
+                <a class="foot-link" href="mailto:tolele666@gmail.com">tolele666@gmail.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://example.com">卡  卡</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"narnona","admin":null,"repo":"narnona.github.io","clientID":"Ov23liAV5f8a9oFXwI9p","clientSecret":"8caa6650c183b3af5f27fe4717dc4905035141ce","distractionFreeMode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
