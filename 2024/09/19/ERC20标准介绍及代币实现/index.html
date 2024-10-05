@@ -59,7 +59,7 @@
     
     
   <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+  
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -173,66 +173,47 @@
         <h1 id="0x00：ERC20标准"><a href="#0x00：ERC20标准" class="headerlink" title="0x00：ERC20标准"></a>0x00：ERC20标准</h1><p>ERC20标准是由EIP-20定义，规定了代币的功能和接口，以确保兼容性和互操作性。</p>
 <p>在<a target="_blank" rel="noopener" href="https://github.com/ethereum/ercs/blob/master/ERCS/erc-20.md">ERC20标准</a>中，定义了2个事件和6个函数，以及3个可选的函数：</p>
 <ul>
-<li><strong>Transfer事件</strong>：必须在代币转移时触发，包括零值转移。代币合约在生成新的代币时（比如mint），也应该触发转移事件，其将<code>_from</code>地址设置为0x0。</li>
+<li><p><strong>Transfer事件</strong>：必须在代币转移时触发，包括零值转移。代币合约在生成新的代币时（比如mint），也应该触发转移事件，其将<code>_from</code>地址设置为0x0。</p>
+<p><code>event Transfer(address indexed _from, address indexed _to, uint256 _value);</code></p>
+</li>
+<li><p><strong>Approval事件</strong>：必须在任何成功调用<code>approve(address _spender, uint256 _value)</code>时触发。<code>event Approval(address indexed _owner, address indexed _spender, uint256 _value);</code></p>
+</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">event Transfer(address indexed _from, address indexed _to, uint256 _value);</span><br></pre></td></tr></table></figure>
+<br>
 
 <ul>
-<li><strong>Approval事件</strong>：必须在任何成功调用<code>approve(address _spender, uint256 _value)</code>时触发。</li>
+<li><p><strong>totalSupply()函数</strong>：返回代币的当前供应量；</p>
+<p><code>function totalSupply() public view returns (uint256);</code></p>
+</li>
+<li><p><strong>balanceOf()函数</strong>：返回账户的代币余额。</p>
+<p><code>function balanceOf(address _owner) public view returns (uint256 balance);</code></p>
+</li>
+<li><p><strong>transfer()函数</strong>：将调用者数量为<code>_value</code>的代币转移到地址<code>_to</code>上，并且必须触发<code>Transfer</code>事件。如果消息调用者的账户余额没有足够的代币可供使用，则该函数应该抛出异常。</p>
+<p><code>function transfer(address _to, uint256 _value) public returns (bool success);</code></p>
+</li>
+<li><p><strong>transferFrom()函数</strong>：将数量为<code>_value</code>的代币从地址<code>_from</code>转移到地址<code>_to</code>，并且必须触发<code>Transfer</code>事件。该<code>transferFrom</code>方法用于提款工作流，允许合约代表您转移代币。例如，这可用于允许合约代表您转移代币和&#x2F;或以子货币收取费用。函数应该抛出异常，除非<code>_from</code>帐户已通过某种机制有意授权消息发送者。</p>
+<p><code>function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);</code></p>
+</li>
+<li><p><strong>approve()函数</strong>：允许<code>_spender</code>多次从消息调用者的帐户提款，最高金额为<code>_value</code>。如果再次调用此函数，它将用<code>_value</code>覆盖当前限额。</p>
+<p><code>function approve(address _spender, uint256 _value) public returns (bool success);</code></p>
+</li>
+<li><p><strong>allowance()函数</strong>：返回<code>_spender</code>仍允许<code>_owner</code>提取的金额。</p>
+<p><code>function allowance(address _owner, address _spender) public view returns (uint256 remaining);</code></p>
+</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">event Approval(address indexed _owner, address indexed _spender, uint256 _value);</span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li><strong>totalSupply</strong>：返回代币的当前供应量；</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function totalSupply() public view returns (uint256);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>balanceOf</strong>：返回账户的代币余额；</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function balanceOf(address _owner) public view returns (uint256 balance);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>transfer</strong>：将调用者数量为<code>_value</code>的代币转移到地址<code>_to</code>上，并且必须触发<code>Transfer</code>事件。如果消息调用者的账户余额没有足够的代币可供使用，则该函数应该抛出异常。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function transfer(address _to, uint256 _value) public returns (bool success);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>transferFrom</strong>：将数量为<code>_value</code>的代币从地址<code>_from</code>转移到地址<code>_to</code>，并且必须触发<code>Transfer</code>事件。该<code>transferFrom</code>方法用于提款工作流，允许合约代表您转移代币。例如，这可用于允许合约代表您转移代币和&#x2F;或以子货币收取费用。函数应该抛出异常，除非<code>_from</code>帐户已通过某种机制有意授权消息发送者。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>approve</strong>：允许<code>_spender</code>多次从消息调用者的帐户提款，最高金额为<code>_value</code>。如果再次调用此函数，它将用<code>_value</code>覆盖当前限额。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function approve(address _spender, uint256 _value) public returns (bool success);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>allowance</strong>：返回<code>_spender</code>仍允许<code>_owner</code>提取的金额。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function allowance(address _owner, address _spender) public view returns (uint256 remaining);</span><br></pre></td></tr></table></figure>
-
-
-
 <p>可选的：</p>
 <ul>
-<li><strong>name</strong>：返回代币的名字；</li>
+<li><p><strong>name()函数</strong>：返回代币的名字；</p>
+<p><code>function name() public view returns (string);</code></p>
+</li>
+<li><p><strong>symbol()函数</strong>：返回代币的符号；</p>
+<p><code>function symbol() public view returns (string);</code></p>
+</li>
+<li><p><strong>decimals()函数</strong>：返回代币使用的精度；</p>
+<p><code>function decimals() public view returns (uint8);</code></p>
+</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function name() public view returns (string);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>symbol</strong>：返回代币的符号；</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function symbol() public view returns (string);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>decimals</strong>：返回代币使用的精度；</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function decimals() public view returns (uint8);</span><br></pre></td></tr></table></figure>
-
-
+<br>
 
 <h1 id="0x01：ERC20代币实现"><a href="#0x01：ERC20代币实现" class="headerlink" title="0x01：ERC20代币实现"></a>0x01：ERC20代币实现</h1><p>ERC20标准规定的接口定义了代币的操作，至于代币如何产生，由我们自己决定。这里以实现一个Wrapped ETH为练习，Wrapped ETH是以太币ETH的ERC20包装版本。由于以太币本身并不符合 ERC20 标准，导致与其他代币之间的互操作性较弱，难以用于去中心化应用程序中。WETH可以1:1与ETH互相兑换。</p>
 <p>因此，除了实现ERC20接口的函数外，还需要定义两个函数：</p>
@@ -242,7 +223,7 @@
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line">pragma solidity ^0.8.0;</span><br><span class="line"></span><br><span class="line">// ERC20 接口规范</span><br><span class="line">interface IERC20 &#123;</span><br><span class="line">	event Transfer(address indexed _from, address indexed _to, uint256 _value);</span><br><span class="line">	event Approval(address indexed _owner, address indexed _spender, uint256 _value);</span><br><span class="line">	</span><br><span class="line">	function totalSupply() external view returns (uint256);</span><br><span class="line">	function balanceOf(address _owner) external view returns (uint256 balance);</span><br><span class="line">	function transfer(address _to, uint256 _value) external returns (bool success);</span><br><span class="line">	function transferFrom(address _from, address _to, uint256 _value) external returns (boolsuccess);</span><br><span class="line">	function approve(address _spender, uint256 _value) external returns (bool success);</span><br><span class="line">	function allowance(address _owner, address _spender) external view returns (uint256 remaining);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract WETH is IERC20 &#123;</span><br><span class="line">    string public _name = &quot;Wrapped Ether&quot;;</span><br><span class="line">	string public _symbol = &quot;WETH&quot;;</span><br><span class="line">	uint8  public _decimals = 18;</span><br><span class="line">	</span><br><span class="line">	mapping (address =&gt; uint) public _balances;</span><br><span class="line">	mapping (address =&gt; mapping (address =&gt; uint)) public _allowance;</span><br><span class="line">	</span><br><span class="line">	event Deposit(address _user, uint256 _value);</span><br><span class="line">	event Withdrawal(address _user, uint256 _value);</span><br><span class="line"></span><br><span class="line">    // 存款, ETH -&gt; WETH</span><br><span class="line">    function deposit() public payable &#123;</span><br><span class="line">		_balances[msg.sender] += msg.value;</span><br><span class="line">		emit Deposit(msg.sender, msg.value);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    // 提款, WETH -&gt; ETH</span><br><span class="line">    function withdraw(uint256 amount) public &#123;</span><br><span class="line">        require((_balances[msg.sender] - amount) &gt; 0,&quot;Not enough balance.&quot;);</span><br><span class="line">        _balances[msg.sender] -= amount;</span><br><span class="line">        (bool success, ) = msg.sender.call&#123;value: amount&#125;(&quot;&quot;);</span><br><span class="line">        require(success,&quot;Withdrawal failed&quot;);</span><br><span class="line">        emit Withdrawal(msg.sender, amount);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // IERC20 totalSupply</span><br><span class="line">    function totalSupply() external view override returns (uint256) &#123;</span><br><span class="line">        return address(this).balance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // IERC20 balanceOf</span><br><span class="line">    function balanceOf(address _owner) external view override returns (uint256 balance) &#123;</span><br><span class="line">        balance = _balances[_owner];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // IERC20 transfer</span><br><span class="line">    function transfer(address _to, uint256 _value) external override returns (bool success) &#123;</span><br><span class="line">        require(_balances[msg.sender] &gt; _value,&quot;Not enough balance.&quot;);</span><br><span class="line">        _balances[msg.sender] -= _value;</span><br><span class="line">        _balances[_to] += _value;</span><br><span class="line">        emit Transfer(msg.sender, _to, _value);</span><br><span class="line">        success = true ;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">    // IERC20 transferFrom</span><br><span class="line">    function transferFrom(address _from, address _to, uint256 _value) external override returns (bool success) &#123;</span><br><span class="line">        require(_balances[_from] &gt;=_value,&quot;Not enough balance.&quot;);</span><br><span class="line">        require((_allowance[_from][msg.sender] -_value) &gt;0,&quot;Not enough balance.&quot;);</span><br><span class="line">        </span><br><span class="line">        _allowance[_from][msg.sender] -=_value;</span><br><span class="line">        _balances[_from] -=_value;</span><br><span class="line">        _balances[_to] +=_value;</span><br><span class="line">        emit Transfer(_from,_to,_value);</span><br><span class="line">        success = true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     // IERC20 approve</span><br><span class="line">    function approve(address _spender, uint256 _value) external override returns (bool success) &#123;</span><br><span class="line">         _allowance[msg.sender][_spender] = _value;</span><br><span class="line">         emit Approval(msg.sender, _spender, _value);</span><br><span class="line">         success = true ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // IERC20 allowance</span><br><span class="line">    function allowance(address _owner, address _spender) external view override returns (uint256 remaining) &#123;</span><br><span class="line">        remaining = _allowance[_owner][_spender];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
+<br>
 
 <h1 id="0x02：另外"><a href="#0x02：另外" class="headerlink" title="0x02：另外"></a>0x02：另外</h1><p>ERC20接口的实现部分其实大差不差，因此可以通过继承使用他人的实现。openZeppelin是被大家所认可的库，其中也有<a target="_blank" rel="noopener" href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol">ERC20标准的实现</a>。</p>
 <p>通过openZeppelin库，要想创建一个ERC20代币，仅需：</p>
@@ -295,7 +276,19 @@
     
     <div class="post-nav">
   
-    <div class="post-nav-item-left"></div>
+    <a class="post-nav-item-left" href="/2024/09/23/%E8%87%AA%E5%8A%A8%E4%BA%A4%E6%98%93%20%20ccxt%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>自动交易 | ccxt库的使用</div>
+    </a>
   
   <div class="vhr"></div>
   
@@ -317,8 +310,6 @@
 </div>
 
     
-    
-      <div id="gitalk-container"></div>
     
   </div>
 
@@ -350,7 +341,7 @@
                 <div class="text">
                   <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg" />
                   <a class="foot-link"
-                     href="mailto:tolele666@gmail.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                     href="mailto:?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
                   申请友链</a>
                 </div>
               </div>
@@ -384,7 +375,7 @@
             <div class="foot-item__body">
               <div class="text">
                 <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg" />
-                <a class="foot-link" href="mailto:tolele666@gmail.com">tolele666@gmail.com</a>
+                <a class="foot-link" href="mailto:"></a>
               </div>
             </div>
           </div>
@@ -401,20 +392,16 @@
       </div>
     </div>
     
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
     
       <script src="/js/search.js"></script>
       <script>searchInitialize("/search.json")</script>
     
     
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script type="text/javascript">
-  const param = JSON.parse('{"enable":true,"owner":"narnona","admin":null,"repo":"narnona.github.io","clientID":"Ov23liAV5f8a9oFXwI9p","clientSecret":"8caa6650c183b3af5f27fe4717dc4905035141ce","distractionFreeMode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
-  let title = location.pathname.substr(0, 50); 
-  param.id = title
-  const gitalk = new Gitalk(param)
-  gitalk.render('gitalk-container')
-</script>
-
   
 
   </body>

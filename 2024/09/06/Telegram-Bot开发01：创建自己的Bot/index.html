@@ -59,7 +59,7 @@
     
     
   <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+  
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -297,8 +297,6 @@
 
     
     
-      <div id="gitalk-container"></div>
-    
   </div>
 
     </div>
@@ -329,7 +327,7 @@
                 <div class="text">
                   <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg" />
                   <a class="foot-link"
-                     href="mailto:tolele666@gmail.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                     href="mailto:?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
                   申请友链</a>
                 </div>
               </div>
@@ -363,7 +361,7 @@
             <div class="foot-item__body">
               <div class="text">
                 <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg" />
-                <a class="foot-link" href="mailto:tolele666@gmail.com">tolele666@gmail.com</a>
+                <a class="foot-link" href="mailto:"></a>
               </div>
             </div>
           </div>
@@ -380,20 +378,16 @@
       </div>
     </div>
     
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
     
       <script src="/js/search.js"></script>
       <script>searchInitialize("/search.json")</script>
     
     
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script type="text/javascript">
-  const param = JSON.parse('{"enable":true,"owner":"narnona","admin":null,"repo":"narnona.github.io","clientID":"Ov23liAV5f8a9oFXwI9p","clientSecret":"8caa6650c183b3af5f27fe4717dc4905035141ce","distractionFreeMode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
-  let title = location.pathname.substr(0, 50); 
-  param.id = title
-  const gitalk = new Gitalk(param)
-  gitalk.render('gitalk-container')
-</script>
-
   
 
   </body>

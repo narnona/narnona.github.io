@@ -59,7 +59,7 @@
     
     
   <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+  
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -181,7 +181,7 @@
 </ol>
 <p>小白鼠：demo.apk</p>
 <h4 id="目标："><a href="#目标：" class="headerlink" title="目标："></a>目标：</h4><p>将<code>addThreeNum(1, 2, 3)</code>改为<code>addThreeNum(4, 5, 6)</code>，并且修改后能够成功运行。</p>
-<p><img src="/%5Cimages%5C%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D%5Cimage-20240806103111215.png" alt="image-20240806103111215"></p>
+<p><img src="/images/%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D/image-20240806103111215.png" alt="image-20240806103111215"></p>
 <blockquote>
 <p>demo.apk下载：<a target="_blank" rel="noopener" href="https://www.123pan.com/s/9j4Xjv-MMAhv.html?%E6%8F%90%E5%8F%96%E7%A0%81:tgno">https://www.123pan.com/s/9j4Xjv-MMAhv.html?提取码:tgno</a></p>
 <p>用到的工具可自行从网上获取。</p>
@@ -192,7 +192,7 @@
 
 
 <h4 id="步骤2：修改"><a href="#步骤2：修改" class="headerlink" title="步骤2：修改"></a>步骤2：修改</h4><p>在output\smali\com\example\myapplication\MainActivity.smail中，把<code>1 2 3 </code>改为<code> 4 5 6</code></p>
-<p><img src="/%5Cimages%5C%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D%5Cimage-20240806095045017.png" alt="image-20240806095045017"></p>
+<p><img src="/images/%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D/image-20240806095045017.png" alt="image-20240806095045017"></p>
 <h4 id="步骤3：重打包"><a href="#步骤3：重打包" class="headerlink" title="步骤3：重打包"></a>步骤3：重打包</h4><p>解压的逆过程，将output目录打包为newdemo.apk</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">E:\&gt; apktool b output\ <span class="literal">-o</span> .\newdemo.apk</span><br><span class="line">I: <span class="keyword">Using</span> Apktool 2.7.0</span><br><span class="line">I: Checking whether sources has changed...</span><br><span class="line">I: Smaling smali folder into classes.dex...</span><br><span class="line">I: Checking whether resources has changed...</span><br><span class="line">I: Building resources...</span><br><span class="line">I: Copying libs... (/lib)</span><br><span class="line">I: Copying libs... (/kotlin)</span><br><span class="line">I: Copying libs... (/META<span class="literal">-INF</span>/services)</span><br><span class="line">I: Building apk file...</span><br><span class="line">I: Copying unknown files/<span class="built_in">dir</span>...</span><br><span class="line">I: Built apk into: .\newdemo.apk</span><br></pre></td></tr></table></figure>
 
@@ -213,9 +213,9 @@
 
 
 <h4 id="最后：尝试运行"><a href="#最后：尝试运行" class="headerlink" title="最后：尝试运行"></a>最后：尝试运行</h4><p>可以成功运行，并且修改有效。</p>
-<p><img src="/%5Cimages%5C%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D%5Cimage-20240806102009372.png" alt="image-20240806102009372"></p>
+<p><img src="/images/%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D/image-20240806102009372.png" alt="image-20240806102009372"></p>
 <h4 id="思考："><a href="#思考：" class="headerlink" title="思考："></a>思考：</h4><p>既然APK可以二次签名，并且能够成功运行。那么，APK中签名机制所起到的作用是什么呢？就是资源文件中META-INF目录下的<code>.RSA .SF .MF</code>三个文件。</p>
-<p><img src="/%5Cimages%5C%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D%5Cimage-20240806120006871.png" alt="image-20240806120006871"></p>
+<p><img src="/images/%E4%BF%AE%E6%94%B9APK%E5%B9%B6%E9%87%8D%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D/image-20240806120006871.png" alt="image-20240806120006871"></p>
 
       </div>
     </div>
@@ -281,8 +281,6 @@
 
     
     
-      <div id="gitalk-container"></div>
-    
   </div>
 
     </div>
@@ -313,7 +311,7 @@
                 <div class="text">
                   <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg" />
                   <a class="foot-link"
-                     href="mailto:tolele666@gmail.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                     href="mailto:?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
                   申请友链</a>
                 </div>
               </div>
@@ -347,7 +345,7 @@
             <div class="foot-item__body">
               <div class="text">
                 <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg" />
-                <a class="foot-link" href="mailto:tolele666@gmail.com">tolele666@gmail.com</a>
+                <a class="foot-link" href="mailto:"></a>
               </div>
             </div>
           </div>
@@ -364,20 +362,16 @@
       </div>
     </div>
     
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
     
       <script src="/js/search.js"></script>
       <script>searchInitialize("/search.json")</script>
     
     
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script type="text/javascript">
-  const param = JSON.parse('{"enable":true,"owner":"narnona","admin":null,"repo":"narnona.github.io","clientID":"Ov23liAV5f8a9oFXwI9p","clientSecret":"8caa6650c183b3af5f27fe4717dc4905035141ce","distractionFreeMode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
-  let title = location.pathname.substr(0, 50); 
-  param.id = title
-  const gitalk = new Gitalk(param)
-  gitalk.render('gitalk-container')
-</script>
-
   
 
   </body>
